@@ -442,14 +442,14 @@ func Login(c *fiber.Ctx) error {
 
 
 	cookie := fiber.Cookie{
-		Name: "token",
-		Value: token,
-		Expires: time.Now().Add(time.Hour*1),
-		Path: "/",
-		Domain: "localhost",
-		Secure: false,
-		
-		
+		Name:     "token",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 1),
+		Path:     "/",
+		Domain:   "travelhat.vercel.app", 
+		Secure:   true,                 
+		HTTPOnly: true,                   
+		SameSite: "None",                 
 	}
 	c.Cookie(&cookie)
 
@@ -497,12 +497,14 @@ func User(c *fiber.Ctx) error {
 
 func Logout(c *fiber.Ctx) error {
 	cookie := fiber.Cookie{
-		Name: "token",
-		Value: "",
-		Expires: time.Now().Add(-time.Hour),
-		Path: "/",
-		Domain: "localhost",
-		Secure: false,
+		Name:     "token",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour * 1),
+		Path:     "/",
+		Domain:   "travelhat.vercel.app", 
+		Secure:   true,                 
+		HTTPOnly: true,                   
+		SameSite: "None",   
 		
 		
 		}
