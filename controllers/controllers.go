@@ -42,16 +42,23 @@ var collectionNameTrip="my_trips"
 
 func Home(c *fiber.Ctx) error {
 	
-	return c.Status(200).JSON(fiber.Map{"msg": "Hi i am learning "})
+	return c.Status(200).JSON(fiber.Map{"msg": "Hi i am Priyanshu Mishra, and welcome to my backend "})
 	
 }
 
 func init(){
-	err := godotenv.Load(".env")
-	if err!=nil{
-		log.Fatal(err)
+	if os.Getenv("GO_ENV") != "production" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
+
 	DB_URI := os.Getenv("DB_URI")
+	if DB_URI == "" {
+		log.Fatal("DB_URI environment variable not set")
+	}
+	
 	clientOption :=options.Client().ApplyURI(DB_URI)
 	client, err := mongo.Connect(context.TODO(), clientOption)
 	if err != nil {
@@ -388,10 +395,11 @@ func Register(c *fiber.Ctx) error {
 
 func Login(c *fiber.Ctx) error {
 
-	if err:=godotenv.Load(".env"); err!=nil{
-		log.Fatal(err)
+	secretKey := os.Getenv("SECRET_KEY")
+	if secretKey == "" {
+		log.Fatal("SECRET_KEY environment variable not set")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal Server Error"})
 	}
-	var secretKey=os.Getenv("SECRET_KEY")
 	var user model.User
 	if err:=c.BodyParser(&user); err!=nil{
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{"error":"Invalid request","status":400})
@@ -444,10 +452,11 @@ func Login(c *fiber.Ctx) error {
 
 func User(c *fiber.Ctx) error {
 
-	if err:=godotenv.Load(".env"); err!=nil{
-		log.Fatal(err)
+	secretKey := os.Getenv("SECRET_KEY")
+	if secretKey == "" {
+		log.Fatal("SECRET_KEY environment variable not set")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal Server Error"})
 	}
-	var secretKey=os.Getenv("SECRET_KEY")
 	cookie := c.Cookies("token")
 
 	
