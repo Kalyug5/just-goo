@@ -1,16 +1,24 @@
 package router
 
 import (
+	"log"
+	"os"
+
 	"github.com/Kalyug5/just-goo/controllers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
 
 func Router() *fiber.App {
 	app := fiber.New()
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatal(err)
+	}
+	allowOrigin := os.Getenv("FRONTEND_URL")
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000",
+		AllowOrigins: allowOrigin,
 		AllowHeaders: "Origin, Content-Type, Accept",
 		AllowCredentials: true,
 	}))
