@@ -24,10 +24,14 @@ type ContentResponse struct{
 }
 
 func Api() *genai.GenerativeModel {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic("here error happened")
+	
+	if os.Getenv("API_KEY") == "" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
 	}
+
 	ctx := context.Background()
 
 	client,error := genai.NewClient(ctx,option.WithAPIKey(os.Getenv("API_KEY")))

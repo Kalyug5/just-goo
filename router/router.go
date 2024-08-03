@@ -11,10 +11,16 @@ import (
 )
 
 func Router() *fiber.App {
-	app := fiber.New()
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal(err)
+
+	if os.Getenv("FRONTEND_URL") == "" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
 	}
+
+	app := fiber.New()
+
 	allowOrigin := os.Getenv("FRONTEND_URL")
 
 	app.Use(cors.New(cors.Config{
