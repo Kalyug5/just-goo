@@ -13,15 +13,14 @@ func main() {
 	fmt.Println("Go Lang Project")
 
 
-	if os.Getenv("ENV") != "production" {
-		err := godotenv.Load()
+	if os.Getenv("PORT") == "" {
+		err := godotenv.Load(".env")
 		if err != nil {
-			log.Fatal("Error loading .env file")
+			log.Fatalf("Error loading .env file: %v", err)
 		}
 	}
 
 	PORT := os.Getenv("PORT")
-
 	if PORT == "" {
 		PORT = "4000" 
 	}

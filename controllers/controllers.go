@@ -47,7 +47,7 @@ func Home(c *fiber.Ctx) error {
 }
 
 func init(){
-	if os.Getenv("GO_ENV") != "production" {
+	if os.Getenv("DB_URI") == "" {
 		err := godotenv.Load(".env")
 		if err != nil {
 			log.Fatal("Error loading .env file")
@@ -395,6 +395,14 @@ func Register(c *fiber.Ctx) error {
 
 func Login(c *fiber.Ctx) error {
 
+	if os.Getenv("SECRET_KEY") == "" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
+	}
+
+
 	secretKey := os.Getenv("SECRET_KEY")
 	if secretKey == "" {
 		log.Fatal("SECRET_KEY environment variable not set")
@@ -451,8 +459,16 @@ func Login(c *fiber.Ctx) error {
 }
 
 func User(c *fiber.Ctx) error {
+	if os.Getenv("SECRET_KEY") == "" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
+	}
+
 
 	secretKey := os.Getenv("SECRET_KEY")
+
 	if secretKey == "" {
 		log.Fatal("SECRET_KEY environment variable not set")
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal Server Error"})
