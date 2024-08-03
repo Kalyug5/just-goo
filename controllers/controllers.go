@@ -446,9 +446,10 @@ func Login(c *fiber.Ctx) error {
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 1),
 		Path:     "/",
-		Domain:   "travelhat.vercel.app", 
-                 
-		SameSite: "None",                 
+		Domain:   "travelhat.onrender.com",
+        Secure:   true,
+        HTTPOnly: true,
+        SameSite: "None",             
 	}
 	c.Cookie(&cookie)
 
@@ -500,9 +501,10 @@ func Logout(c *fiber.Ctx) error {
 		Value:    "",
 		Expires:  time.Now().Add(-time.Hour * 1),
 		Path:     "/",
-		Domain:   "travelhat.vercel.app", 
-	                  
-		SameSite: "None",   
+		Domain:   "travelhat.onrender.com",
+        Secure:   true,
+        HTTPOnly: true,
+        SameSite: "None",   
 		
 		
 		}
