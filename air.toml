@@ -1,0 +1,10 @@
+root="."
+tmp_dir="tmp"
+
+[build]
+# The name of the build. This is used to uniquely identify the build.
+    bin="main"
+    cmd="go build -o {{.Output}} {{.Input}}"
+    exclude=["tmp/*", "client/*", "node_modules/*"]
+    include=["**/*.go"]
+    ignore=["tmp/*","client/*", "node_modules/*"]
