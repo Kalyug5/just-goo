@@ -448,7 +448,7 @@ func Login(c *fiber.Ctx) error {
 		Path:     "/",
 		Domain:   "travelhat.onrender.com",
 		HTTPOnly: false,
-		Secure: false,
+		Secure: true,
         SameSite: "None",             
 	}
 	c.Cookie(&cookie)
@@ -504,7 +504,7 @@ func Logout(c *fiber.Ctx) error {
 		Domain:   "travelhat.onrender.com",
 		HTTPOnly: false,
         SameSite: "None",   
-		Secure: false,
+		Secure: true,
 	}
 		c.Cookie(&cookie)
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{"data":"Logout successful","status":200})
