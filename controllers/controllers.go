@@ -445,8 +445,8 @@ func Login(c *fiber.Ctx) error {
 		Name:     "token",
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 1),
-		Path:     "/",
-		Domain:   "travelhat.onrender.com",
+
+
 		HTTPOnly: false,
 
         SameSite: "None",             
@@ -500,8 +500,8 @@ func Logout(c *fiber.Ctx) error {
 		Name:     "token",
 		Value:    "",
 		Expires:  time.Now().Add(-1*time.Hour),
-		Path:     "/",
-		Domain:   "travelhat.onrender.com",
+
+	
 		HTTPOnly: false,
         SameSite: "None",   
 	}
