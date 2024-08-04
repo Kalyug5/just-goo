@@ -448,7 +448,7 @@ func Login(c *fiber.Ctx) error {
 		Path:     "/",
 		Domain:   "travelhat.onrender.com",
 		HTTPOnly: false,
-		Secure: false,
+
         SameSite: "None",             
 	}
 	c.Cookie(&cookie)
@@ -499,10 +499,9 @@ func Logout(c *fiber.Ctx) error {
 	cookie := fiber.Cookie{
 		Name:     "token",
 		Value:    "",
-		Expires:  time.Now().Add(-time.Hour * 1),
+		Expires:  time.Now().Add(-1*time.Hour),
 		Path:     "/",
 		Domain:   "travelhat.onrender.com",
-		Secure: false,
 		HTTPOnly: false,
         SameSite: "None",   
 		
