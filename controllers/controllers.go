@@ -479,7 +479,11 @@ func User(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token", "status": fiber.StatusUnauthorized})
 	}
 
+	fmt.Println(authHeader)
+
 	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+	fmt.Println(tokenString)
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return []byte(secretKey), nil
 	})
