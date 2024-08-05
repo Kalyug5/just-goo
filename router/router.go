@@ -25,7 +25,7 @@ func Router() *fiber.App {
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: allowOrigin,
-		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowCredentials: true,
 	}))
 
