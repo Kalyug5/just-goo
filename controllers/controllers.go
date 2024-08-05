@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/Kalyug5/just-goo/api"
@@ -441,17 +442,17 @@ func Login(c *fiber.Ctx) error {
 	}
 
 
-	cookie := fiber.Cookie{
-		Name:     "token",
-		Value:    token,
-		Expires:  time.Now().Add(time.Hour * 1),
+	// cookie := fiber.Cookie{
+	// 	Name:     "token",
+	// 	Value:    token,
+	// 	Expires:  time.Now().Add(time.Hour * 1),
 
 
-		HTTPOnly: false,
+	// 	HTTPOnly: false,
 
-        SameSite: "None",             
-	}
-	c.Cookie(&cookie)
+    //     SameSite: "None",             
+	// }
+	// c.Cookie(&cookie)
 
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"data":"Login successful","status":200,"token":token})
@@ -473,12 +474,14 @@ func User(c *fiber.Ctx) error {
 		log.Fatal("SECRET_KEY environment variable not set")
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal Server Error"})
 	}
-	cookie := c.Cookies("token")
+	authHeader := c.Get("Authorization")
+	if authHeader == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token", "status": fiber.StatusUnauthorized})
+	}
 
-	
-
-	token,err := jwt.ParseWithClaims(cookie,&jwt.RegisteredClaims{},func(t *jwt.Token) (interface{}, error) {
-		return []byte(secretKey),nil
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(secretKey), nil
 	})
 
 	if err!=nil{
@@ -496,16 +499,16 @@ func User(c *fiber.Ctx) error {
 }
 
 func Logout(c *fiber.Ctx) error {
-	cookie := fiber.Cookie{
-		Name:     "token",
-		Value:    "",
-		Expires:  time.Now().Add(-1*time.Hour),
+	// cookie := fiber.Cookie{
+	// 	Name:     "token",
+	// 	Value:    "",
+	// 	Expires:  time.Now().Add(-1*time.Hour),
 
 	
-		HTTPOnly: false,
-        SameSite: "None",   
-	}
-		c.Cookie(&cookie)
+	// 	HTTPOnly: false,
+    //     SameSite: "None",   
+	// }
+	// 	c.Cookie(&cookie)
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{"data":"Logout successful","status":200})
 
 }
