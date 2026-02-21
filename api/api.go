@@ -10,21 +10,20 @@ import (
 	"google.golang.org/api/option"
 )
 
-type Content struct{
+type Content struct {
 	Parts []string `json:"parts"`
-
 }
 
-type Candidates struct{
+type Candidates struct {
 	Content *Content `json:"content"`
 }
 
-type ContentResponse struct{
+type ContentResponse struct {
 	Candidates *[]Candidates `json:"candidates"`
 }
 
 func Api() *genai.GenerativeModel {
-	
+
 	if os.Getenv("API_KEY") == "" {
 		err := godotenv.Load(".env")
 		if err != nil {
@@ -34,15 +33,13 @@ func Api() *genai.GenerativeModel {
 
 	ctx := context.Background()
 
-	client,error := genai.NewClient(ctx,option.WithAPIKey(os.Getenv("API_KEY")))
+	client, error := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("API_KEY")))
 
 	if error != nil {
 		log.Fatal(error)
 	}
 
-
-
-	model := client.GenerativeModel("gemini-1.5-flash")
+	model := client.GenerativeModel("gemini-2.5-flash")
 
 	return model
 
