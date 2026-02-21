@@ -308,9 +308,20 @@ func CreateTravelIternery(c *fiber.Ctx) error {
 	for _, cad := range *generatedResp.Candidates {
 		if cad.Content != nil {
 			for _, part := range cad.Content.Parts {
-				err := json.Unmarshal([]byte(part), &travel)
-				if err != nil {
-					return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to parse itinerary", "status": http.StatusInternalServerError})
+
+				cleaned := strings.TrimSpace(part)
+				cleaned = strings.TrimPrefix(cleaned, "```json")
+				cleaned = strings.TrimPrefix(cleaned, "```")
+				cleaned = strings.TrimSuffix(cleaned, "```")
+				cleaned = strings.TrimSpace(cleaned)
+
+				if err := json.Unmarshal([]byte(cleaned), &travel); err != nil {
+					fmt.Println("Raw AI Output:", cleaned)
+					return c.Status(http.StatusInternalServerError).JSON(
+						fiber.Map{
+							"error":  "Failed to parse itinerary",
+							"status": http.StatusInternalServerError,
+						})
 				}
 			}
 		}
